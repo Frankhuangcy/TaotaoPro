@@ -1,0 +1,153 @@
+<!--<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>管理员登录</title>
+
+    <link rel="stylesheet" type="text/css" href="js/jquery-easyui-1.4.1/themes/default/easyui.css" />
+    <link rel="stylesheet" type="text/css" href="js/jquery-easyui-1.4.1/themes/icon.css" />
+    <link rel="stylesheet" type="text/css" href="css/taotao.css" />
+    <script type="text/javascript" src="js/jquery-easyui-1.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery-easyui-1.4.1/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="js/jquery-easyui-1.4.1/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+
+</head>
+<body style="background-color: #F3F3F3">
+
+    <div class="easyui-dialog" title="管理员登录" data-options="closable:false,draggable:false" style="width:400px;height:300px;padding:10px;">
+
+        <table>
+       	<div style="margin-left: 50px;margin-top: 50px;">
+       		<div style="margin-bottom:20px;">
+	            <div>
+	            	用户名: <input id="loginname" name="loginname" class="easyui-textbox" data-options="required:true" style="width:200px;height:32px" value="admin"/>
+	            </div>
+	        </div>
+	        <div style="margin-bottom:20px">
+	            <div>
+	            	密&nbsp;&nbsp;码: <input id="password" name="password" class="easyui-textbox" type="password" style="width:200px;height:32px" data-options="" value="admin"/>
+	            </div>
+	        </div>
+            <div style="margin-bottom:20px">
+
+                    验证码: <input id="securityCode" name="securityCode" class="easyui-textbox" onchange="codeCheck()" value="" type="text" style="width:100px;height:32px"/>
+                <img id="codiImg" src="admin/showCode.do" alt="验证码" title="点击更换" onclick="codeChange()" />
+            </div>
+	        <div>
+	            <a id="login" class="easyui-linkbutton" iconCls="icon-ok" style="width:100px;height:32px;margin-left: 50px" onclick="loginBtnClick()" href="javascript:void(0)">登录</a>
+	        </div>
+       	</div>
+
+        </table>
+    </div>
+
+    
+    <script type="text/javascript">
+
+        //将一个表单的数据返回成JSON对象
+        $.fn.serializeObject = function () {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function () {
+                if (o[this.name]) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+        //校验登录名：只能输入5-20个以字母开头、可带数字、“_”、“.”的字串
+        function isRegisterUserName(s)
+        {
+            var patrn=/^[a-zA-Z]{1}([a-zA-Z0-9]|[_]){4,29}$/;
+            if (!patrn.exec(s)) return false
+            return true
+        }
+
+        function loginBtnClick() {
+            console.log(1);
+            var username = $("#loginname").val()
+            var password = $("#password").val()
+            var securityCode = $("#securityCode").val()
+//            if (!isRegisterUserName(username)){
+//                document.getElementById("nameCheck").innerHTML='30长度的字母、数字和下划线'
+//                return
+//            }else{
+//                document.getElementById("nameCheck").innerHTML=''
+//            }
+//            if (password == ''){
+//                document.getElementById("passwordCheck").innerHTML='密码不能为空'
+//            }
+//            if (securityCode == ''){
+//                $("#codeCheck").html("验证码输入不正确")
+//                return
+//            }
+            var d = {"username":username,
+                "password":password,
+                "securityCode":securityCode}
+            d= JSON.stringify(d)
+            console.log(d);
+            $.ajax({
+                type:"post",
+                url:"admin/dologin.do",
+                contentType:"application/json",
+                data:d,
+                success:function (data) {
+                    if (data=="true"){
+                        window.location.href = 'admin/toMain.do'
+                    }else{
+                        document.getElementById("infoCheck").innerHTML = '用户名或密码不正确'
+                    }
+                },
+                error:function () {
+                    alert("error")
+                }
+            })
+        }
+
+        // 图片验证
+        function codeCheck() {
+            var d = $("#securityCode").val();
+
+            $.ajax({
+                type:"post",
+                url:"admin/codeCheck.do",
+                data:{"code":d},
+                success:function (data) {
+                    console.log(data);
+                    console.log("@@@@@");
+                    if (data=="true"){
+                        $("#codeCheck").html("验证成功")
+                        document.getElementById("loginBtn").setAttribute("onclick","loginBtnClick()")
+
+                    }else{
+                        $("#codeCheck").html("验证码输入不正确")
+                        document.getElementById("loginBtn").removeAttribute("onclick")
+                    }
+                },
+                error:function () {
+                    alert("error")
+                }
+            })
+        }
+
+        var codeChangeTimes=0;
+        // codeChange
+        function codeChange() {
+            document.getElementById("codiImg").removeAttribute("src")
+            var codeUrl = "admin/showCode.do?times="+codeChangeTimes
+            document.getElementById("codiImg").setAttribute("src",codeUrl);
+            codeChangeTimes++
+            console.log(codeChangeTimes);
+        }
+
+
+    </script>
+</body>
+</html>
