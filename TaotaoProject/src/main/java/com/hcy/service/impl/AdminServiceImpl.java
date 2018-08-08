@@ -20,7 +20,7 @@ public class AdminServiceImpl implements AdminService {
     private AdminMapper adminMapper;
 
     @Override
-    public List<Admin> findByLoginnameAndPassword(@Param("loginname") String loginname, @Param("password") String password) {
+    public List<Admin> findByLoginnameAndPassword( String loginname, String password) {
 
         return adminMapper.findByLoginnameAndPassword(loginname, password);
     }

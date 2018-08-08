@@ -30,7 +30,7 @@ import java.util.Map;
 public class AdminController {
 
     @Resource
-    private AdminService adminService;
+    private AdminService adminServiceImpl;
 
 
     // 获得code的值
@@ -40,13 +40,13 @@ public class AdminController {
     @ResponseBody
     public String dologin(@RequestBody Map<String, String> map, HttpServletRequest request) {
         System.out.println(map);
-        List<Admin> adminList = adminService.findByLoginnameAndPassword(map.get("username"), MD5Util.encode2hex(map.get("password")));
-        Admin admin = adminList.get(0);
-        System.out.println(admin);
-        HttpSession session = request.getSession();
-        session.setAttribute("admin",admin);
+        List<Admin> adminList = adminServiceImpl.findByLoginnameAndPassword(map.get("username"), MD5Util.encode2hex(map.get("password")));
 
         if (adminList.size()>0){
+            Admin admin = adminList.get(0);
+            System.out.println(admin);
+            HttpSession session = request.getSession();
+            session.setAttribute("admin",admin);
             return "true";
         }else{
             return "false";

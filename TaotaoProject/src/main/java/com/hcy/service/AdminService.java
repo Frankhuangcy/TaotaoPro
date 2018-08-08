@@ -12,6 +12,5 @@ import java.util.List;
 public interface AdminService {
 
     // 查找登录名和密码
-    List<Admin> findByLoginnameAndPassword(@Param("loginname") String loginname,
-                                           @Param("password") String password);
+    List<Admin> findByLoginnameAndPassword( String loginname, String password);
 }

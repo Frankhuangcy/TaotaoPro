@@ -99,11 +99,12 @@
                 contentType:"application/json",
                 data:d,
                 success:function (data) {
+                    console.log(data);
                     if (data=="true"){
                         window.location.href = 'admin/toMain.do'
-                    }else{
-                        document.getElementById("infoCheck").innerHTML = '用户名或密码不正确'
-                    }
+                    } //else{
+//                        document.getElementById("infoCheck").innerHTML = '用户名或密码不正确'
+//                    }
                 },
                 error:function () {
                     alert("error")
