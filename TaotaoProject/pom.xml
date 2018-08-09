@@ -217,6 +217,14 @@
       <artifactId>poi-excelant</artifactId>
       <version>3.9</version>
     </dependency>
+
+    <!--page helper-->
+    <dependency>
+      <groupId>com.github.pagehelper</groupId>
+      <artifactId>pagehelper</artifactId>
+      <version>5.1.2</version>
+    </dependency>
+
   </dependencies>
 
 

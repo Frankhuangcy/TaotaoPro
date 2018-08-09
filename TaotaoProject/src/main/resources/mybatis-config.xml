@@ -22,6 +22,7 @@
     <mappers>
         <!--<package name="com.hcy.dao"/>-->
         <mapper resource="com/hcy/mapper/AdminMapper.xml"/>
+        <mapper resource="com/hcy/mapper/TbItemMapper.xml"/>
     </mappers>
 
 </configuration>

@@ -4,7 +4,9 @@ import com.hcy.bean.TbItem;
 import com.hcy.bean.TbItemExample;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface TbItemMapper {
     int countByExample(TbItemExample example);
 
@@ -27,4 +29,7 @@ public interface TbItemMapper {
     int updateByPrimaryKeySelective(TbItem record);
 
     int updateByPrimaryKey(TbItem record);
+
+    List<TbItem> showAll();
+
 }
